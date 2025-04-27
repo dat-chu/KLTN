@@ -20,7 +20,7 @@ services:
       - DATABASE_URL=postgresql://user:password@postgres/mydatabase
     volumes:
       - .:/app
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 volumes:
   postgres_data:
