@@ -1,7 +1,5 @@
 from fastapi import FastAPI
 from app.route import register_routes
-from app.database.base import Base
-from app.database.session import engine
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
