@@ -13,3 +13,5 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     
     role = relationship("Role", back_populates="users")
+
+from app.model.role import Role

@@ -6,6 +6,7 @@ class UserResponse(BaseModel):
     email: str
     password: str
     is_active: int
+    role_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
