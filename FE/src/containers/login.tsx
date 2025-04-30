@@ -1,7 +1,14 @@
 import { useState } from 'react';
-import { Label, TextInput, Button } from 'flowbite-react';
+import { Label, TextInput } from 'flowbite-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../store/authThunk';
+import { AppDispatch, RootState } from '../store/store';
+import LoadingButton from '../components/loadingButton';
 
 const AuthModal = () => {
+    const { loading } = useSelector((state: RootState) => state.auth);
+    const dispatch: AppDispatch = useDispatch();
+
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -34,8 +41,7 @@ const AuthModal = () => {
         const hasErrors = Object.values(newErrors).some((msg) => msg !== '');
         if (hasErrors) return;
 
-        console.log('Registering with:', formData);
-        // Perform registration logic
+        dispatch(registerUser(formData));
     };
 
     // Handle Login
@@ -50,9 +56,6 @@ const AuthModal = () => {
 
         const hasErrors = Object.values(newErrors).some((msg) => msg !== '');
         if (hasErrors) return;
-
-        console.log('Logging in with:', formData);
-        // Perform login logic
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,12 +134,12 @@ const AuthModal = () => {
                     {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                 </div>
 
-                <Button
+                <LoadingButton
+                    isLoading={loading} // Check the loading state from Redux
                     onClick={isRegister ? handleRegister : handleLogin}
-                    className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white hover:bg-blue-600"
                 >
                     {isRegister ? 'Register' : 'Login'}
-                </Button>
+                </LoadingButton>
             </div>
         </div>
     );

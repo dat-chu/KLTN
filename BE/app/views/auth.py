@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from app.model.role import Role
+from app.model.user import User
 from app.authentication.auth import (
     verify_password,
     create_access_token,
@@ -8,6 +10,9 @@ from app.authentication.auth import (
     decode_token,
 )
 from app.schema.auth_schema import Token
+from app.schema.auth_schema import Register 
+from sqlalchemy.orm import Session
+from app.database.get_db import get_db
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -55,15 +60,26 @@ def refresh_token(refresh_token: str):
     }
     
 @router.post("/register")
-def register(username: str, email: str, password: str):
-    if username in fake_user_db:
-        raise HTTPException(status_code=400, detail="Username already exists")
-
-    hashed_password = hash_password(password)
-    fake_user_db[username] = {
-        "username": username,
-        "email": email,
-        "hashed_password": hashed_password,
-    }
-
-    return {"msg": "User registered successfully"}
+def register(resquest: Register, db: Session = Depends(get_db)):
+    users = db.query(User).all()
+    for user in users:
+        if user.name == resquest.username:
+            raise HTTPException(status_code=400, detail="Username already exists")
+        if user.email == resquest.email:
+            raise HTTPException(status_code=400, detail="Email already exists")
+    username = resquest.username
+    email = resquest.email
+    password = resquest.password
+    
+    # Create new user
+    new_user = User(
+        name=username,
+        email=email,
+        password=hash_password(password),
+        is_active=True,
+        role_id=3,  # Assuming role_id 1 is for Candidate
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return {"message": "User created successfully"}

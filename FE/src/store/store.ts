@@ -7,6 +7,14 @@ export const store = configureStore({
     users: usersReducer,
     auth: authReducer,
   },
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware({
+  //     thunk: {
+  //       extraArgument: {
+  //         showAlert: () => {},
+  //       },
+  //     },
+  //   }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
