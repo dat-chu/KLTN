@@ -4,6 +4,10 @@ import Layout from './components/layout';
 import AuthModal from './containers/login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import RoleProtectedRoute from './utils/RoleProtectedRoute';
+import { ROLE } from './typeEnum';
+import { ROUTER } from './helpers/constant';
+import Unauthorized from './containers/unauthorized';
 
 function App() {
     return (
@@ -11,18 +15,30 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route
-                        path="/"
+                        path={ROUTER.HOME}
+                        element={
+                            <RoleProtectedRoute
+                                allowedRoles={[ROLE.CANDIDATE, ROLE.RECRUITER, ROLE.ADMIN]}
+                            >
+                                <Layout>
+                                    <Home />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.LOGIN}
                         element={
                             <Layout>
-                                <Home />
+                                <AuthModal />
                             </Layout>
                         }
                     />
                     <Route
-                        path="/login"
+                        path={ROUTER.UNAUTHOZIZED}
                         element={
                             <Layout>
-                                <AuthModal />
+                                <Unauthorized />
                             </Layout>
                         }
                     />

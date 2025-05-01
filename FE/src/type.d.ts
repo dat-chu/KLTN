@@ -1,4 +1,5 @@
 export {};
+import { ROLE } from "./typeEnum"
 
 declare global {
   interface UserRegister {
@@ -23,7 +24,18 @@ declare global {
 
   interface User {
     id: number;
-    username: string;
+    name: string;
     email: string;
+    password: string;
+    role_id: ROLE;
+    is_active: boolean;
   }
+
+  interface UserLoginResponse {
+    access_token: string;
+    token_type: string;
+    refresh_token: string;
+    user: User
+  }
+
 }

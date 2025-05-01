@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Label, TextInput } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../store/authThunk';
+import { registerUser, loginUser } from '../store/authThunk';
 import { AppDispatch, RootState } from '../store/store';
 import LoadingButton from '../components/loadingButton';
+import { saveToLocalStorage } from '../helpers/localStorage';
+import { useNavigate } from 'react-router-dom';
 
 const AuthModal = () => {
+    const navigate = useNavigate();
     const { loading } = useSelector((state: RootState) => state.auth);
     const dispatch: AppDispatch = useDispatch();
 
@@ -23,7 +26,7 @@ const AuthModal = () => {
     });
 
     // Handle Register
-    const handleRegister = () => {
+    const handleRegister = async () => {
         const newErrors = {
             username: formData.username ? '' : 'Username is required',
             password: formData.password ? '' : 'Password is required',
@@ -41,11 +44,11 @@ const AuthModal = () => {
         const hasErrors = Object.values(newErrors).some((msg) => msg !== '');
         if (hasErrors) return;
 
-        dispatch(registerUser(formData));
+        await dispatch(registerUser(formData));
     };
 
     // Handle Login
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const newErrors = {
             username: formData.username ? '' : 'Username is required',
             password: formData.password ? '' : 'Password is required',
@@ -56,6 +59,16 @@ const AuthModal = () => {
 
         const hasErrors = Object.values(newErrors).some((msg) => msg !== '');
         if (hasErrors) return;
+
+        const loginResult = await dispatch(
+            loginUser({
+                userData: formData,
+                navigate: (path: string) => {
+                    navigate(path);
+                },
+            })
+        );
+        saveToLocalStorage('loginUser', loginResult.payload);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
