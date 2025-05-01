@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Label, TextInput } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser, loginUser } from '../store/authThunk';
@@ -6,10 +6,11 @@ import { AppDispatch, RootState } from '../store/store';
 import LoadingButton from '../components/loadingButton';
 import { saveToLocalStorage } from '../helpers/localStorage';
 import { useNavigate } from 'react-router-dom';
+import _ from 'lodash';
 
 const AuthModal = () => {
     const navigate = useNavigate();
-    const { loading } = useSelector((state: RootState) => state.auth);
+    const { loading, user } = useSelector((state: RootState) => state.auth);
     const dispatch: AppDispatch = useDispatch();
 
     const [formData, setFormData] = useState({
@@ -24,6 +25,12 @@ const AuthModal = () => {
         password: '',
         email: '',
     });
+
+    useEffect(() => {
+        if (!_.isEmpty(user)) {
+            navigate('/', { replace: true });
+        }
+    }, [user]);
 
     // Handle Register
     const handleRegister = async () => {

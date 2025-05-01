@@ -8,19 +8,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: {
-    access_token: "",
-    token_type: "",
-    refresh_token: "",
-    user: {
-      id: 0,
-      name: "",
-      email: "",
-      password: "",
-      role_id: 3,
-      is_active: false,
-    },
-  },
+  user: {} as UserLoginResponse,
   loading: false,
   error: null,
 };
