@@ -3,6 +3,8 @@ import { Button, Avatar, Dropdown, DropdownHeader, DropdownItem } from 'flowbite
 import { useEffect, useState } from 'react';
 import { loadFromLocalStorage } from '../helpers/localStorage';
 import { ROLE } from '../typeEnum';
+import { ROUTER } from '../helpers/constant';
+import axiosClient from '../api/axiosClient';
 
 interface AuthUser {
     username: string;
@@ -26,9 +28,10 @@ const Header = () => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('loginUser');
         setUser(null);
-        navigate('/login');
+        localStorage.removeItem('loginUser');
+        delete axiosClient.defaults.headers.common['Authorization'];
+        navigate(ROUTER.LOGIN);
     };
 
     const renderTabs = () => {
@@ -64,7 +67,7 @@ const Header = () => {
                 return (
                     <>
                         <Link
-                            to="/manage-users"
+                            to={ROUTER.USER_MANAGEMENT}
                             className="text-lg text-gray-700 hover:text-blue-600"
                         >
                             Manage Users
@@ -116,7 +119,6 @@ const Header = () => {
                                 {user.email}
                             </span>
                         </DropdownHeader>
-                        <DropdownItem onClick={() => navigate('/profile')}>Profile</DropdownItem>
                         <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
                     </Dropdown>
                 ) : (

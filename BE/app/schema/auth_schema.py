@@ -7,6 +7,12 @@ class Token(BaseModel):
     token_type: str
     user: UserResponse
     
+    
+class RefreshToken(BaseModel):
+    refresh_token: str
+    token_type: str
+    access_token: str
+    
 
 class Register(BaseModel):
     username: str

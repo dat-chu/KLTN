@@ -8,6 +8,7 @@ import RoleProtectedRoute from './utils/RoleProtectedRoute';
 import { ROLE } from './typeEnum';
 import { ROUTER } from './helpers/constant';
 import Unauthorized from './containers/unauthorized';
+import AdminUserManagement from './containers/Admin/UserManagement';
 
 function App() {
     return (
@@ -42,9 +43,19 @@ function App() {
                             </Layout>
                         }
                     />
+                    <Route
+                        path={ROUTER.USER_MANAGEMENT}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.ADMIN]}>
+                                <Layout>
+                                    <AdminUserManagement />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
                 </Routes>
                 <ToastContainer
-                    position="top-center"
+                    position="top-right"
                     autoClose={4000}
                     hideProgressBar={false}
                     newestOnTop={false}

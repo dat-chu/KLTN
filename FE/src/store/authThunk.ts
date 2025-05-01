@@ -31,7 +31,7 @@ export const loginUser = createAsyncThunk(
       const response = await authApi.login(userData);
       toast.success("Login successfully");
       navigate(ROUTER.HOME);
-      return response;
+      return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.detail);

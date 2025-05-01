@@ -7,7 +7,7 @@ from app.authentication.auth import (
     hash_password,
     decode_token,
 )
-from app.schema.auth_schema import Token
+from app.schema.auth_schema import RefreshToken, Token
 from app.schema.auth_schema import Register, Login
 from sqlalchemy.orm import Session
 from app.database.get_db import get_db
@@ -30,7 +30,7 @@ def login(request: Login, db: Session = Depends(get_db)):
         "user": user
     }
 
-@router.post("/refresh", response_model=Token)
+@router.post("/refresh", response_model=RefreshToken)
 def refresh_token(refresh_token: str):
     payload = decode_token(refresh_token)
     if payload is None:
@@ -73,3 +73,10 @@ def register(resquest: Register, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return {"message": "User created successfully"}
+
+
+@router.post("/logout")
+def logout():
+    # Invalidate the refresh token
+    # This is a placeholder implementation. You should implement the logic to invalidate the token.
+    return {"message": "Logged out successfully"}

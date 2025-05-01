@@ -4,7 +4,7 @@ import authReducer from "./authSlice";
 import { loadFromLocalStorage } from "../helpers/localStorage";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const userFromStorage: any = loadFromLocalStorage('loginUser');
+const userFromStorage: any = loadFromLocalStorage('loginUser') || {};
 
 export const store = configureStore({
   reducer: {
