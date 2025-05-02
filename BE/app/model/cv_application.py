@@ -15,3 +15,7 @@ class CVApplication(Base):
     candidate = relationship("User", back_populates="cv_applications")
     job_description = relationship("JobDescription", back_populates="cv_applications")
     cv = relationship("CV", back_populates="cv_applications")
+    
+from app.model.cv import CV
+from app.model.job_description import JobDescription
+from app.model.user import User

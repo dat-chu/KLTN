@@ -9,10 +9,12 @@ class CandidateFeedback(Base):
     id = Column(Integer, primary_key=True)
     candidate_id = Column(Integer, ForeignKey("users.id"))
     job_description_id = Column(Integer, ForeignKey("job_descriptions.id"))
-    created_by = Column(Integer, ForeignKey("users.id"))
     status = Column(Boolean, default=False) # True for accepted, False for rejected
     comment = Column(Text)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    candidate = relationship("User", foreign_keys=[candidate_id], back_populates="candidate_feedbacks")
+    candidate = relationship("User", back_populates="candidate_feedbacks")
     job_description = relationship("JobDescription", back_populates="candidate_feedbacks")
+    
+from app.model.user import User
+from app.model.job_description import JobDescription

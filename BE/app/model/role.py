@@ -9,3 +9,6 @@ class Role(Base):
     name = Column(String, nullable=False)
     
     users = relationship("User", back_populates="role")
+    
+from app.model.user import User
+

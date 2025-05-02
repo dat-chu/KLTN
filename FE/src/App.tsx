@@ -9,6 +9,8 @@ import { ROLE } from './typeEnum';
 import { ROUTER } from './helpers/constant';
 import Unauthorized from './containers/unauthorized';
 import AdminUserManagement from './containers/Admin/UserManagement';
+import ProgrammingLanguage from './containers/Admin/ProgrammingLanguage';
+import JobPosition from './containers/Admin/JobPosition';
 
 function App() {
     return (
@@ -49,6 +51,26 @@ function App() {
                             <RoleProtectedRoute allowedRoles={[ROLE.ADMIN]}>
                                 <Layout>
                                     <AdminUserManagement />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.PROGRAMMING_LANGUAGE}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.ADMIN]}>
+                                <Layout>
+                                    <ProgrammingLanguage />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.JOB_POSITION}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.ADMIN]}>
+                                <Layout>
+                                    <JobPosition />
                                 </Layout>
                             </RoleProtectedRoute>
                         }

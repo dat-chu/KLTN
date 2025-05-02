@@ -28,7 +28,6 @@ axiosClient.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log("Error response:", error);
     const originalRequest = error.config;
 
     const storedToken = loadFromLocalStorage("loginUser");

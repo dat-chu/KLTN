@@ -72,7 +72,7 @@ def register(resquest: Register, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return {"message": "User created successfully"}
+    return new_user
 
 
 @router.post("/logout")

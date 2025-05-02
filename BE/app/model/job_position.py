@@ -9,4 +9,6 @@ class JobPosition(Base):
     name = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     
-    job_descriptions = relationship("JobDescription", back_populates="job_position")
+    job_descriptions = relationship("JobDescription", back_populates="job_positions")
+    
+from app.model.job_description import JobDescription

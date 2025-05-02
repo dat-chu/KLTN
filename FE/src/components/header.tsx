@@ -73,7 +73,19 @@ const Header = () => {
                             Manage Users
                         </Link>
                         <Link to="/reports" className="text-lg text-gray-700 hover:text-blue-600">
-                            Reports
+                            Job Description
+                        </Link>
+                        <Link
+                            to={ROUTER.PROGRAMMING_LANGUAGE}
+                            className="text-lg text-gray-700 hover:text-blue-600"
+                        >
+                            Programming Language
+                        </Link>
+                        <Link
+                            to={ROUTER.JOB_POSITION}
+                            className="text-lg text-gray-700 hover:text-blue-600"
+                        >
+                            Job Position
                         </Link>
                     </>
                 );

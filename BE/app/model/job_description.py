@@ -3,6 +3,7 @@ from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boo
 from app.database.base import Base
 from sqlalchemy.orm import relationship
 
+
 class JobDescription(Base):
     __tablename__ = "job_descriptions"
     
@@ -25,9 +26,16 @@ class JobDescription(Base):
     job_positions = relationship("JobPosition", back_populates="job_descriptions")
     job_description_programming_languages = relationship(
         "JobDescriptionProgrammingLanguage",
-        back_populates="job_description",
-        cascade="all, delete-orphan"
+        back_populates="job_description"
     )
-    favorites_jobs = relationship("FavoriteJob", back_populates="job_description")
+    favorite_jobs = relationship("FavoriteJob", back_populates="job_description")
     candidate_feedbacks = relationship("CandidateFeedback", back_populates="job_description")
     cv_applications = relationship("CVApplication", back_populates="job_description")
+    created_by_user = relationship("User", back_populates="job_descriptions")
+    
+from app.model.job_position import JobPosition
+from app.model.user import User
+from app.model.favorite_job import FavoriteJob
+from app.model.candidate_feedback import CandidateFeedback
+from app.model.cv_application import CVApplication
+from app.model.job_description_programming_language import JobDescriptionProgrammingLanguage

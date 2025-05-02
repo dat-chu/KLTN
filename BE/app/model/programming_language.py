@@ -12,3 +12,6 @@ class ProgrammingLanguage(Base):
         "JobDescriptionProgrammingLanguage",
         back_populates="programming_language"
     )
+    
+from app.model.job_description_programming_language import JobDescriptionProgrammingLanguage
+    

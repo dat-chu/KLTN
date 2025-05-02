@@ -12,6 +12,16 @@ class User(Base):
     role_id = Column(Integer, ForeignKey("roles.id"))
     is_active = Column(Boolean, default=True)
     
+    job_descriptions = relationship("JobDescription", back_populates="created_by_user")
     role = relationship("Role", back_populates="users")
+    favorite_jobs = relationship("FavoriteJob", back_populates="user")
+    candidate_feedbacks = relationship("CandidateFeedback", back_populates="candidate")
+    cv_applications = relationship("CVApplication", back_populates="candidate")
+    cvs = relationship("CV", back_populates="candidate")
 
 from app.model.role import Role
+from app.model.job_description import JobDescription
+from app.model.favorite_job import FavoriteJob
+from app.model.candidate_feedback import CandidateFeedback
+from app.model.cv_application import CVApplication
+from app.model.cv import CV

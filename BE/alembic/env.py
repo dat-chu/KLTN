@@ -20,8 +20,8 @@ from app.database.base import Base
 from app.model.user import User
 from app.model.role import Role
 from app.model.programming_language import ProgrammingLanguage
-from app.model.job_position import JobPosition
 from app.model.job_description import JobDescription
+from app.model.job_position import JobPosition
 from app.model.job_description_programming_language import JobDescriptionProgrammingLanguage
 from app.model.favorite_job import FavoriteJob
 from app.model.cv import CV

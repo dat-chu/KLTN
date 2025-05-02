@@ -67,4 +67,14 @@ declare global {
     role?: number,
     status?: number 
   }
+
+  interface ProgrammingLanguage{
+    id?: number;
+    name: string;
+  }
+
+  interface JobPosition{
+    id?: number;
+    name: string;
+  }
 }

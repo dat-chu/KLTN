@@ -13,3 +13,6 @@ class CV(Base):
 
     candidate = relationship("User", back_populates="cvs")
     cv_applications = relationship("CVApplication", back_populates="cv")
+    
+from app.model.cv_application import CVApplication
+from app.model.user import User
