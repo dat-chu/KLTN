@@ -106,10 +106,8 @@ const PostJob = ({ initialData, onSubmit, isEditing = false }: PostJobProps) => 
             programmingLanguages: transformProgrammingLanguages(form.programmingLanguages),
         };
         if (onSubmit) {
-            console.log('check jobData', jobData);
             await onSubmit(jobData);
         } else {
-            console.log('check jobData creation', jobData);
             await dispatch(createJobDescription(jobData));
         }
     };

@@ -82,7 +82,9 @@ function App() {
                     <Route
                         path={ROUTER.JOB_DESCRIPTION}
                         element={
-                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                            <RoleProtectedRoute
+                                allowedRoles={[ROLE.RECRUITER, ROLE.CANDIDATE, ROLE.ADMIN]}
+                            >
                                 <Layout>
                                     <JobDescription />
                                 </Layout>
@@ -92,7 +94,9 @@ function App() {
                     <Route
                         path={ROUTER.JOB_DESCRIPTION_DETAIL}
                         element={
-                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                            <RoleProtectedRoute
+                                allowedRoles={[ROLE.RECRUITER, ROLE.CANDIDATE, ROLE.ADMIN]}
+                            >
                                 <Layout>
                                     <JobDescriptionDetail />
                                 </Layout>

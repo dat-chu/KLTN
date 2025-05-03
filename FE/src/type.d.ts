@@ -102,4 +102,10 @@ declare global {
     status?: string;
     search?: string;
   }
+
+  interface FavoriteJob {
+    id?: number;
+    user_id: number;
+    job_description_id: number;
+  }
 }

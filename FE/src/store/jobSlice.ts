@@ -183,7 +183,23 @@ const jobSlice = createSlice({
             })
             .addCase(getJobDescriptions.fulfilled, (state, action) => {
                 state.loading = false;
-                state.jobs = action.payload.jobs as JobDescription[];
+                const copy_jobs = action.payload.jobs.map((job) => ({
+                    id: job.id,
+                    createdBy: job.created_by,
+                    position: job.job_position_id,
+                    title: job.title,
+                    description: job.description,
+                    experienceYear: job.experience_year,
+                    level: job.level,
+                    workingType: job.working_type,
+                    contractType: job.contract_type,
+                    salaryMin: job.salary_min,
+                    salaryMax: job.salary_max,
+                    status: job.status,
+                    endDate: job.end_date,
+                    programmingLanguages: job.programming_languages
+                }));
+                state.jobs = copy_jobs
                 state.total = action.payload.total as number;
             })
             .addCase(getJobDescriptions.rejected, (state, action) => {

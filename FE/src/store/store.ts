@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import usersReducer from './userSlice';
 import authReducer from './authSlice';
 import jobReducer from './jobSlice';
+import favoriteJobReducer from './favoriteJobSlice';
 import { loadFromLocalStorage } from '../helpers/localStorage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,6 +13,7 @@ export const store = configureStore({
         users: usersReducer,
         auth: authReducer,
         job: jobReducer,
+        favoriteJob: favoriteJobReducer,
     },
     preloadedState: {
         auth: {

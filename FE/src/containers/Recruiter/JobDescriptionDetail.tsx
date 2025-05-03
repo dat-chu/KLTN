@@ -302,38 +302,33 @@ const JobDescriptionDetail = () => {
 
             {/* CTA Button */}
             {user.role_id === ROLE.CANDIDATE && (
-                <motion.div
-                    variants={itemVariants}
-                    className="mt-12 text-center"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                >
-                    <button
-                        onClick={handleApply}
-                        disabled={isApplying}
-                        className="relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-10 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+                <div className="relative inline-flex w-full items-center justify-center">
+                    <label
+                        htmlFor="file-upload"
+                        className="cursor-pointer rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-10 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                     >
-                        <>
-                            Apply for this position
-                            <svg
-                                className="ml-2 h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                />
-                            </svg>
-                        </>
-                    </button>
-                    <p className="mt-3 text-sm text-gray-500">
-                        Applications close on {formatDateToMMDDYYYY(jobById.end_date)}
-                    </p>
-                </motion.div>
+                        Upload CV
+                        <svg
+                            className="ml-2 inline-block h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={4}
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                        </svg>
+                    </label>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        className="hidden"
+                        // onChange={handleFileChange}
+                    />
+                </div>
             )}
         </motion.div>
     );

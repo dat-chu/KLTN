@@ -10,11 +10,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import { ROLE } from '../../typeEnum';
 import { useSearchParams } from 'react-router-dom';
+import { getFavoriteJobs } from '../../store/favoriteJobThunk';
 
 const JobDescription = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { jobs, total, loading } = useSelector((state: RootState) => state.job);
     const { user } = useSelector((state: RootState) => state.auth);
+    const { favorites } = useSelector((state: RootState) => state.favoriteJob);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [levelFilter, setLevelFilter] = useState(() => searchParams.get('level') || '');
@@ -55,6 +57,12 @@ const JobDescription = () => {
             );
         }
     }, [dispatch, levelFilter, statusFilter, search, currentPage]);
+
+    useEffect(() => {
+        if (user.user.role_id === ROLE.CANDIDATE) {
+            dispatch(getFavoriteJobs());
+        }
+    }, [user.user.role_id]);
 
     const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLevelFilter(e.target.value);
@@ -112,8 +120,17 @@ const JobDescription = () => {
             ) : (
                 <>
                     <div className="grid gap-6">
+                        {console.log('check favorites=====', favorites)}
                         {jobs.length > 0 ? (
-                            jobs.map((job) => <PostJobCard key={job.id} {...job} />)
+                            jobs.map((job) => (
+                                <PostJobCard
+                                    key={job.id}
+                                    {...job}
+                                    isFavoriteJob={favorites
+                                        .map((favorite) => favorite.job_description_id)
+                                        .includes(job.id)}
+                                />
+                            ))
                         ) : (
                             <div className="text-center text-gray-500">No jobs found.</div>
                         )}

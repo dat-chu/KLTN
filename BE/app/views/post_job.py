@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
 from sqlalchemy.orm import Session, joinedload
+from app.model.favorite_job import FavoriteJob
 from app.model.job_description_programming_language import JobDescriptionProgrammingLanguage
 from app.model.programming_language import ProgrammingLanguage
 from app.helper import get_current_user_id
@@ -21,6 +22,55 @@ def get_job_descriptions(
     db: Session = Depends(get_db)
 ):
     query = db.query(JobDescription)
+
+    if level:
+        query = query.filter(JobDescription.level.ilike(f"%{level}%"))
+    if status:
+        query = query.filter(JobDescription.status.ilike(f"%{status}%"))
+    if search:
+        query = query.filter(or_(
+            JobDescription.title.ilike(f"%{search}%"),
+            JobDescription.description.ilike(f"%{search}%")
+        ))
+
+    total = query.count()
+
+    # Add programming languages
+    jobs = query.options(
+        joinedload(JobDescription.job_description_programming_languages)
+        .joinedload(JobDescriptionProgrammingLanguage.programming_language)
+    ).order_by(JobDescription.created_at.desc()).offset(skip).limit(limit).all()
+    
+    # get programming languages array object {id, name}
+    for job in jobs:
+        programming_languages = [
+            {"id": pl.programming_language.id, "name": pl.programming_language.name} 
+                for pl in job.job_description_programming_languages
+        ]
+        job.programming_languages = programming_languages
+
+    
+    return {"total": total, "jobs": jobs}
+
+
+# get job description by favorite job
+@router.get("/favorite-jobs", response_model=JobPaginationResponse)
+def get_job_description_by_favorite_job(
+    level: str = Query(default=None),
+    status: str = Query(default=None),
+    search: str = Query(default=""),
+    skip: int = 0,
+    limit: int = 10,
+    current_user_id: str = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+):
+    query = db.query(JobDescription).filter(
+        JobDescription.id.in_(db.query(
+            FavoriteJob.job_description_id).filter(
+                FavoriteJob.user_id == current_user_id
+                )
+            )
+        )
 
     if level:
         query = query.filter(JobDescription.level.ilike(f"%{level}%"))

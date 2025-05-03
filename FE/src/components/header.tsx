@@ -41,11 +41,17 @@ const Header = () => {
             case ROLE.CANDIDATE:
                 return (
                     <>
-                        <Link to="/jobs" className="text-lg text-gray-700 hover:text-blue-600">
+                        <Link
+                            to={ROUTER.JOB_DESCRIPTION}
+                            className="text-lg text-gray-700 hover:text-blue-600"
+                        >
                             Jobs
                         </Link>
-                        <Link to="/my-cv" className="text-lg text-gray-700 hover:text-blue-600">
-                            My CV
+                        <Link
+                            to={ROUTER.FAVORITE_JOB}
+                            className="text-lg text-gray-700 hover:text-blue-600"
+                        >
+                            My CVs
                         </Link>
                     </>
                 );

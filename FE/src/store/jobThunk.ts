@@ -131,7 +131,7 @@ export const getJobDescriptions = createAsyncThunk(
     async ({ page, limit, level, status, search }: JobFilter, thunkAPI) => {
         try {
             const skip = (page - 1) * limit;
-            let query = `/jobs/created_by?skip=${skip}&limit=${limit}`;
+            let query = `/job-descriptions?skip=${skip}&limit=${limit}`;
             if (level && level !== 'undefined') query += `&level=${level}`;
             if (status && status !== 'undefined') query += `&status=${status}`;
             if (search) query += `&search=${search}`;

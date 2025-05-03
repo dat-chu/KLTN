@@ -10,6 +10,7 @@ export const ROUTER = {
     JOB_DESCRIPTION_DETAIL: '/job-description/:id',
     POST_JOB: '/post-job',
     EDIT_JOB: '/edit-job/:id',
+    FAVORITE_JOB: '/favorite-job',
 };
 
 export const ROLE_MAP: Record<number, string> = {
@@ -44,7 +45,7 @@ export const WORKING_TYPE_OPTIONS = [
     { value: '', label: 'Select working type' },
     { value: 'offline', label: 'Offline' },
     { value: 'online', label: 'Online' },
-];
+]; 
 
 export const CONTRACT_TYPE_OPTIONS = [
     { value: '', label: 'Select contract type' },
@@ -53,7 +54,6 @@ export const CONTRACT_TYPE_OPTIONS = [
 ];
 
 export const JOB_DESCRIPTION_STATUS = [
-    { value: '', label: 'Select status' },
     { value: 'reviewing', label: 'Reviewing' },
     { value: 'approved', label: 'Approved' },
 ];
