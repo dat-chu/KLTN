@@ -101,7 +101,10 @@ const AdminUserManagement = () => {
                                 type="text"
                                 placeholder="Search by name or email"
                                 value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
+                                onChange={(e) => {
+                                    setSearchText(e.target.value);
+                                    setCurrentPage(1);
+                                }}
                                 className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
                             />
                         </div>
@@ -109,7 +112,10 @@ const AdminUserManagement = () => {
                         <div>
                             <select
                                 value={filterRole}
-                                onChange={(e) => setFilterRole(e.target.value)}
+                                onChange={(e) => {
+                                    setFilterRole(e.target.value);
+                                    setCurrentPage(1);
+                                }}
                                 className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
                             >
                                 <option value="">All roles</option>
@@ -124,7 +130,10 @@ const AdminUserManagement = () => {
                         <div>
                             <select
                                 value={filterStatus}
-                                onChange={(e) => setFilterStatus(e.target.value)}
+                                onChange={(e) => {
+                                    setFilterStatus(e.target.value);
+                                    setCurrentPage(1);
+                                }}
                                 className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
                             >
                                 <option value="">All status</option>

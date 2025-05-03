@@ -77,4 +77,29 @@ declare global {
     id?: number;
     name: string;
   }
+
+  interface JobDescription{
+    id?: number
+    createdBy: number
+    position: number
+    title: string
+    description: string
+    experienceYear: number
+    level: string
+    workingType: string
+    contractType: string
+    salaryMin: number
+    salaryMax: number
+    status: string
+    endDate: string
+    programmingLanguages: string[]
+  }
+
+  interface JobFilter {
+    page: number;
+    limit: number;
+    level?: string;
+    status?: string;
+    search?: string;
+  }
 }

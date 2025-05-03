@@ -50,7 +50,7 @@ const JobPosition = () => {
                         className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                     />
                     <LoadingButton
-                        isLoading={false}
+                        isLoading={loading}
                         onClick={handleAdd}
                         className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
                     >

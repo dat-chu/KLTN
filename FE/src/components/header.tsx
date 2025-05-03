@@ -58,8 +58,11 @@ const Header = () => {
                         >
                             Candidates
                         </Link>
-                        <Link to="/post-job" className="text-lg text-gray-700 hover:text-blue-600">
-                            Post Job
+                        <Link
+                            to={ROUTER.JOB_DESCRIPTION}
+                            className="text-lg text-gray-700 hover:text-blue-600"
+                        >
+                            Job Description
                         </Link>
                     </>
                 );

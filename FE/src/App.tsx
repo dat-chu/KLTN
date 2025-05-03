@@ -11,6 +11,10 @@ import Unauthorized from './containers/unauthorized';
 import AdminUserManagement from './containers/Admin/UserManagement';
 import ProgrammingLanguage from './containers/Admin/ProgrammingLanguage';
 import JobPosition from './containers/Admin/JobPosition';
+import PostJob from './containers/Recruiter/PostJob';
+import JobDescription from './containers/Recruiter/JobDescription';
+import JobDescriptionDetail from './containers/Recruiter/JobDescriptionDetail';
+import EditJobPage from './containers/Recruiter/EditJob';
 
 function App() {
     return (
@@ -71,6 +75,46 @@ function App() {
                             <RoleProtectedRoute allowedRoles={[ROLE.ADMIN]}>
                                 <Layout>
                                     <JobPosition />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.JOB_DESCRIPTION}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                                <Layout>
+                                    <JobDescription />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.JOB_DESCRIPTION_DETAIL}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                                <Layout>
+                                    <JobDescriptionDetail />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.POST_JOB}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                                <Layout>
+                                    <PostJob />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.EDIT_JOB}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                                <Layout>
+                                    <EditJobPage />
                                 </Layout>
                             </RoleProtectedRoute>
                         }

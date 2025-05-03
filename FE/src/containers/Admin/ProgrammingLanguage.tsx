@@ -54,7 +54,7 @@ const ProgrammingLanguage = () => {
                         onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                     />
                     <LoadingButton
-                        isLoading={false}
+                        isLoading={loading}
                         onClick={handleAdd}
                         className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
                     >

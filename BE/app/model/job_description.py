@@ -15,7 +15,7 @@ class JobDescription(Base):
     experience_year = Column(Integer)
     level = Column(String(50))
     working_type = Column(String(50))
-    constract_type = Column(String(50))
+    contract_type = Column(String(50))
     salary_min = Column(Float)
     salary_max = Column(Float)
     status = Column(String(50))

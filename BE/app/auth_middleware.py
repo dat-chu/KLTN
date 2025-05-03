@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from fastapi.responses import JSONResponse
@@ -15,12 +16,12 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
-            return JSONResponse(status_code=401, content={"detail": "Missing or invalid token"})
+            raise HTTPException(status_code=401, detail="Not authenticated")
 
         token = auth_header.split(" ")[1]
         payload = decode_token(token)
         if not payload:
-            return JSONResponse(status_code=401, content={"detail": "Invalid or expired token"})
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
 
         request.state.user = payload.get("sub")
         return await call_next(request)
