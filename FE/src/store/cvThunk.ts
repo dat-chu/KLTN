@@ -30,3 +30,16 @@ export const getCVApplications = createAsyncThunk(
         }
     }
 )
+
+export const compareCVJD = createAsyncThunk(
+    'cv/compareCVJD',
+    async (data: {cv: string, jd: string}, thunkAPI) => {
+        try {
+            const response = await cvApi.compareCVJD(data);
+            return response.data;
+        } catch (error: any) {
+            toast.error(error.response.data.detail);
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+)

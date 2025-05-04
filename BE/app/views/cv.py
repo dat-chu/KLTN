@@ -1,14 +1,17 @@
+from openai import OpenAI
 import os
 import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException, Depends, File, UploadFile, status
-from app.helper import get_current_user_id
+from app.model.job_description import JobDescription
+from app.model.role import Role
+from app.helper import get_current_user_id, get_current_user_role_id
 from app.model.cv import CV
 from app.model.cv_application import CVApplication
 from sqlalchemy.orm import Session
 from app.database.get_db import get_db
-from app.schema.cv_schema import CVs
+from app.schema.cv_schema import CVJDRequest, CVs
 from sqlalchemy.orm import joinedload
 from imghdr import what as image_type
 
@@ -16,6 +19,20 @@ router = APIRouter(prefix="/cvs", tags=["CV"])
 
 # Load environment variables
 load_dotenv()
+
+PROMPT = """
+    Please compare my CV with this job description and provide a conclusion on 
+    how well my qualifications align with the job description.
+    My CV:
+    {cv}
+    Job Description:
+    {jd}
+"""
+
+# OpenAI configuration
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = "gpt-3.5-turbo"
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Cloudinary configuration
 cloudinary.config(
@@ -112,41 +129,65 @@ async def upload_image_cv(
 @router.get("/my-cv-applications")
 def get_cv_applications(
     db: Session = Depends(get_db),
-    current_user_id: int = Depends(get_current_user_id)
+    current_user_id: int = Depends(get_current_user_id),
+    current_user_role: str = Depends(get_current_user_role_id)
 ):
-    """
-    Get all CV applications for the current user
-    
-    Args:
-        db: Database session
-        current_user_id: Authenticated user ID
-    
-    Returns:
-        List of CV applications with related data
-    
-    Raises:
-        HTTPException: If no applications found
-    """
     try:
-        cv_applications = (
-            db.query(CVApplication)
-            .options(
-                joinedload(CVApplication.candidate),
-                joinedload(CVApplication.job_description),
-                joinedload(CVApplication.cv)
+        role_name = db.query(Role).filter(Role.id == current_user_role).first().name
+
+        if role_name == "Candidate":
+            cv_applications = (
+                db.query(CVApplication)
+                .options(
+                    joinedload(CVApplication.candidate),
+                    joinedload(CVApplication.job_description),
+                    joinedload(CVApplication.cv)
+                )
+                .filter(CVApplication.candidate_id == current_user_id)
+                .order_by(CVApplication.applied_at.desc())
+                .all()
             )
-            .filter(CVApplication.candidate_id == current_user_id)
-            .order_by(CVApplication.applied_at.desc())
-            .all()
-        )
 
-        if not cv_applications:
-            return []
+            if not cv_applications:
+                return []
 
-        return cv_applications
+            return cv_applications
+        
+        if role_name == "Recruiter":
+            cv_applications = (
+                db.query(CVApplication)
+                .join(CVApplication.job_description)
+                .options(
+                    joinedload(CVApplication.candidate),
+                    joinedload(CVApplication.job_description),
+                    joinedload(CVApplication.cv)
+                )
+                .filter(JobDescription.created_by == current_user_id)
+                .order_by(CVApplication.applied_at.desc())
+                .all()
+            )
+            
+            if not cv_applications:
+                return []
+
+            return cv_applications
         
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve CV applications: {str(e)}"
         )
+        
+        
+@router.post("/compare-cv-jd")
+async def compare_cv_jd(req: CVJDRequest):
+    try:
+        prompt = PROMPT.format(cv=req.cv, jd=req.jd)
+        response = openai_client.chat.completions.create(
+            model=OPENAI_MODEL,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return {"comparisonResult": response.choices[0].message['content']}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+        

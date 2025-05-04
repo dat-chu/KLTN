@@ -127,7 +127,7 @@ function App() {
                     <Route
                         path={ROUTER.MY_CV_APPLICATIONS}
                         element={
-                            <RoleProtectedRoute allowedRoles={[ROLE.CANDIDATE]}>
+                            <RoleProtectedRoute allowedRoles={[ROLE.CANDIDATE, ROLE.RECRUITER]}>
                                 <Layout>
                                     <MyCVApplication />
                                 </Layout>

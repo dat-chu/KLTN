@@ -129,7 +129,10 @@ const JobDescriptionDetail = () => {
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                             />
                         </svg>
-                        <span>{jobById.working_type || 'Remote/On-site'}</span>
+                        <span>
+                            {getLabelByValue(jobById.working_type, WORKING_TYPE_OPTIONS) ||
+                                'Remote/On-site'}
+                        </span>
                     </div>
                 </div>
             </motion.div>

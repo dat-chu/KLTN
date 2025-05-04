@@ -141,24 +141,26 @@ const PostJobCard = ({
                         Delete
                     </Button>
                     {/* Admin: Approve/Reject */}
-                    <div className="flex gap-2">
-                        <Button
-                            size="xs"
-                            className="cursor-pointer bg-green-500 transition hover:bg-green-600"
-                            onClick={handleApprove}
-                        >
-                            <CheckCircle size={14} />
-                            Approve
-                        </Button>
-                        <Button
-                            size="xs"
-                            className="cursor-pointer bg-red-500 transition hover:bg-red-600"
-                            onClick={handleReject}
-                        >
-                            <XCircle size={14} />
-                            Reject
-                        </Button>
-                    </div>
+                    {user.role_id === ROLE.ADMIN && (
+                        <div className="flex gap-2">
+                            <Button
+                                size="xs"
+                                className="cursor-pointer bg-green-500 transition hover:bg-green-600"
+                                onClick={handleApprove}
+                            >
+                                <CheckCircle size={14} />
+                                Approve
+                            </Button>
+                            <Button
+                                size="xs"
+                                className="cursor-pointer bg-red-500 transition hover:bg-red-600"
+                                onClick={handleReject}
+                            >
+                                <XCircle size={14} />
+                                Reject
+                            </Button>
+                        </div>
+                    )}
                 </div>
             ) : (
                 <div className="mt-4 flex justify-end">

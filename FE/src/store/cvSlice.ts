@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from '@reduxjs/toolkit';
-import {uploadFile, getCVApplications} from './cvThunk';
+import {uploadFile, getCVApplications, compareCVJD} from './cvThunk';
 
 interface UserState {
     myCVApplications: any[];
     loading: boolean;
     error: string | null;
     loadingCV: boolean
+    loadingCompare: boolean
 }
 
 const initialState: UserState = {
     myCVApplications: [],
     loading: false,
     error: null,
-    loadingCV: false
+    loadingCV: false,
+    loadingCompare: false
 };
 
 const cv = createSlice({
@@ -45,6 +47,18 @@ const cv = createSlice({
             })
             .addCase(getCVApplications.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload as string;
+            });
+        builder
+            .addCase(compareCVJD.pending, (state) => {
+                state.loadingCompare = true;
+                state.error = null;
+            })
+            .addCase(compareCVJD.fulfilled, (state) => {
+                state.loadingCompare = false;
+            })
+            .addCase(compareCVJD.rejected, (state, action) => {
+                state.loadingCompare = false;
                 state.error = action.payload as string;
             });
     }

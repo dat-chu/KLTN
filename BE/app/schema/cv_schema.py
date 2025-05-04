@@ -18,4 +18,9 @@ class CVResponse (BaseModel):
     class Config:
         from_attributes = True  
         
+class CVJDRequest (BaseModel):
+    cv: str
+    jd: str
          
+    class Config:
+        from_attributes = True

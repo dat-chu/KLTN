@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCVApplications } from '../../store/cvThunk';
+import { getCVApplications, compareCVJD } from '../../store/cvThunk';
 import { Card, Spinner, Badge } from 'flowbite-react';
 import { AppDispatch, RootState } from '../../store/store';
 import {
@@ -15,10 +15,13 @@ import {
 import { getLabelByValue } from '../../helpers/convertToSelectOptions';
 import { CONTRACT_TYPE_OPTIONS, LEVEL_OPTIONS, WORKING_TYPE_OPTIONS } from '../../helpers/constant';
 import { Button } from 'flowbite-react';
+import { Link } from 'react-router';
+import { ROLE } from '../../typeEnum';
 
 const MyCVApplication = () => {
     const dispatch: AppDispatch = useDispatch();
     const { myCVApplications, loading } = useSelector((state: RootState) => state.cv);
+    const { user } = useSelector((state: RootState) => state.auth.user);
 
     useEffect(() => {
         dispatch(getCVApplications());
@@ -44,34 +47,47 @@ const MyCVApplication = () => {
         return gradientClasses[Math.floor(Math.random() * gradientClasses.length)];
     };
 
-    const handleAskChatGPT = (cv: any, job_description: string) => {
+    const handleAskChatGPT = async (cv: any, job_description: string) => {
         const cvImage = cv.file_path.replace('/upload/', '/upload/fl_attachment/');
         // Logic to call API to compare CV with Job Description via ChatGPT
-        // For example, sending request to your backend that integrates with ChatGPT
         console.log('Comparing CV with Job Description...', cvImage, job_description);
+        const response = await dispatch(compareCVJD({ cv: cvImage, jd: job_description }));
+        console.log(response);
     };
 
     return (
         <div className="container mx-auto px-4 py-6">
-            <h2 className="mb-6 text-center text-3xl font-bold text-gray-800">
-                My CV Applications
-            </h2>
+            <h2 className="mb-6 text-center text-3xl font-bold text-gray-800">CV Applications</h2>
             {myCVApplications.length === 0 ? (
-                <p className="text-center text-gray-600">You haven't applied for any jobs yet.</p>
+                <p className="text-center text-gray-600">There is no application for any job.</p>
             ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {myCVApplications.map((app: any) => {
                         const job = app.job_description;
                         const cv = app.cv;
+                        const candidate = app.candidate;
                         return (
                             <Card
                                 key={app.id}
                                 className={`transform p-4 shadow-lg transition-all hover:scale-103 hover:shadow-md ${getRandomGradient()}`}
                             >
                                 <div className="flex flex-col gap-4">
-                                    <h3 className="text-xl font-semibold text-blue-700">
-                                        {job.title}
-                                    </h3>
+                                    <Link to={`/job-description/${job.id}`}>
+                                        <h3 className="text-xl font-semibold text-blue-700">
+                                            {job.title}
+                                        </h3>
+                                    </Link>
+
+                                    {user.role_id === ROLE.RECRUITER && (
+                                        <div className="text-sm text-gray-800">
+                                            👤 <span className="font-semibold">Candidate:</span>{' '}
+                                            {candidate.name}
+                                            <br />
+                                            📧 <span className="font-semibold">Email:</span>{' '}
+                                            {candidate.email}
+                                        </div>
+                                    )}
+
                                     <div className="flex flex-wrap gap-2 text-sm text-gray-700">
                                         <Badge color="info" className="shadow-md hover:shadow-lg">
                                             <HiOutlineBriefcase className="mr-1 inline" />
@@ -101,6 +117,7 @@ const MyCVApplication = () => {
                                             )}
                                         </Badge>
                                     </div>
+
                                     <p className="mt-2 text-gray-600">
                                         <span className="font-medium text-black">
                                             Salary range:{' '}
@@ -111,6 +128,7 @@ const MyCVApplication = () => {
                                         <span className="font-medium text-black">Applied on: </span>
                                         {new Date(app.applied_at).toLocaleString()}
                                     </p>
+
                                     <div className="flex flex-col gap-2">
                                         <a
                                             href={cv.file_path}
@@ -128,7 +146,10 @@ const MyCVApplication = () => {
                                             </Button>
                                         </a>
                                         <a
-                                            href={`${cv.file_path.replace('/upload/', '/upload/fl_attachment/')}`}
+                                            href={cv.file_path.replace(
+                                                '/upload/',
+                                                '/upload/fl_attachment/'
+                                            )}
                                         >
                                             <Button
                                                 color="light"

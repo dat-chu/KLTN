@@ -59,7 +59,7 @@ const Header = () => {
                 return (
                     <>
                         <Link
-                            to="/candidates"
+                            to={ROUTER.MY_CV_APPLICATIONS}
                             className="text-lg text-gray-700 hover:text-blue-600"
                         >
                             Candidates
