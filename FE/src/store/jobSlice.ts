@@ -14,6 +14,8 @@ import {
     fetchJobsByCurrentUser,
     deleteJobDescription,
     getJobDescriptionById,
+    approvedJobDescription,
+    rejectJobDescription,
 } from './jobThunk';
 
 interface JobState {
@@ -278,6 +280,38 @@ const jobSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
         })
+        builder
+            .addCase(approvedJobDescription.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(approvedJobDescription.fulfilled, (state, action) => {
+                state.loading = false;
+                const index = state.jobs.findIndex((job) => job.id === action.payload.id);
+                if (index !== -1) {
+                    state.jobs[index].status = action.payload.status;
+                }
+            })
+            .addCase(approvedJobDescription.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+        builder
+            .addCase(rejectJobDescription.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(rejectJobDescription.fulfilled, (state, action) => {
+                state.loading = false;
+                const index = state.jobs.findIndex((job) => job.id === action.payload.id);
+                if (index !== -1) {
+                    state.jobs[index].status = action.payload.status;
+                }
+            })
+            .addCase(rejectJobDescription.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
     },
 });
 

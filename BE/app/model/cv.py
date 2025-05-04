@@ -9,6 +9,7 @@ class CV(Base):
     id = Column(Integer, primary_key=True)
     candidate_id = Column(Integer, ForeignKey("users.id"))
     file_path = Column(String(255), nullable=False)
+    public_id = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     candidate = relationship("User", back_populates="cvs")

@@ -8,3 +8,9 @@ def get_current_user_id(request: Request, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user.id
+
+def get_current_user_role_id(request: Request, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.name == request.state.user).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user.role_id

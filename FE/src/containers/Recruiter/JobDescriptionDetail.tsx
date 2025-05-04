@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Spinner } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobDescriptionById, getJobPositionById } from '../../store/jobThunk';
@@ -10,13 +11,15 @@ import { formatDateToMMDDYYYY } from '../../helpers/date';
 import MarkdownViewer from '../../components/MarkdownViewer';
 import { ROLE } from '../../typeEnum';
 import { motion } from 'framer-motion';
+import { uploadFile } from '../../store/cvThunk';
 
 const JobDescriptionDetail = () => {
     const dispatch: AppDispatch = useDispatch();
-    const { jobById, loading, jobPositionById } = useSelector((state: RootState) => state.job);
+    const { loadingCV, jobById, loading, jobPositionById } = useSelector(
+        (state: RootState) => state.job
+    );
     const { user } = useSelector((state: RootState) => state.auth.user);
     const { id } = useParams();
-    const [isApplying, setIsApplying] = useState(false);
 
     useEffect(() => {
         const fetchJobDetail = async () => {
@@ -26,12 +29,6 @@ const JobDescriptionDetail = () => {
 
         fetchJobDetail();
     }, [id]);
-
-    const handleApply = () => {
-        setIsApplying(true);
-        // Handle application logic here
-        setTimeout(() => setIsApplying(false), 2000);
-    };
 
     if (loading) {
         return (
@@ -62,6 +59,20 @@ const JobDescriptionDetail = () => {
                 duration: 0.5,
             },
         },
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !id) return;
+
+        const data = new FormData();
+        data.append('file', file);
+
+        try {
+            await dispatch(uploadFile({ data, id }));
+        } catch (error) {
+            console.error('Upload error:', error);
+        }
     };
 
     return (
@@ -302,32 +313,44 @@ const JobDescriptionDetail = () => {
 
             {/* CTA Button */}
             {user.role_id === ROLE.CANDIDATE && (
-                <div className="relative inline-flex w-full items-center justify-center">
-                    <label
-                        htmlFor="file-upload"
-                        className="cursor-pointer rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-10 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-                    >
-                        Upload CV
-                        <svg
-                            className="ml-2 inline-block h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+                <div className="space-y-2">
+                    <div className="relative inline-flex w-full items-center justify-center">
+                        <label
+                            htmlFor="file-upload"
+                            className="cursor-pointer rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-10 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={4}
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                            />
-                        </svg>
-                    </label>
-                    <input
-                        id="file-upload"
-                        type="file"
-                        className="hidden"
-                        // onChange={handleFileChange}
-                    />
+                            Upload Scanned CV (Image Only)
+                            {loadingCV ? (
+                                <Spinner color="info" size="md" className="ml-2" />
+                            ) : (
+                                <svg
+                                    className="ml-2 inline-block h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={4}
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                    />
+                                </svg>
+                            )}
+                        </label>
+                        <input
+                            id="file-upload"
+                            type="file"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            className="hidden"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+
+                    <div className="text-center text-sm text-gray-600">
+                        <p>• Only scanned CV images accepted (JPG, PNG, WEBP)</p>
+                        <p>• Ensure clear, readable text</p>
+                    </div>
                 </div>
             )}
         </motion.div>

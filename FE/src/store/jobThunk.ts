@@ -218,3 +218,31 @@ export const deleteJobDescription = createAsyncThunk(
         }
     }
 );
+
+export const approvedJobDescription = createAsyncThunk(
+    'job/approvedJobDescription',
+    async (id: number, thunkAPI) => {
+        try {
+            const response = await jobDescriptionApi.approvedJobDescription(id);
+            toast.success('Approved job description successfully');
+            return response.data;
+        } catch (error: any) {
+            toast.error(error.response.data.detail);
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const rejectJobDescription = createAsyncThunk(
+    'job/rejectJobDescription',
+    async (id: number, thunkAPI) => {
+        try {
+            const response = await jobDescriptionApi.rejectJobDescription(id);
+            toast.success('Reject job description successfully');
+            return response.data;
+        } catch (error: any) {
+            toast.error(error.response.data.detail);
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);

@@ -48,7 +48,7 @@ const Header = () => {
                             Jobs
                         </Link>
                         <Link
-                            to={ROUTER.FAVORITE_JOB}
+                            to={ROUTER.MY_CV_APPLICATIONS}
                             className="text-lg text-gray-700 hover:text-blue-600"
                         >
                             My CVs
@@ -81,7 +81,10 @@ const Header = () => {
                         >
                             Manage Users
                         </Link>
-                        <Link to="/reports" className="text-lg text-gray-700 hover:text-blue-600">
+                        <Link
+                            to={ROUTER.JOB_DESCRIPTION}
+                            className="text-lg text-gray-700 hover:text-blue-600"
+                        >
                             Job Description
                         </Link>
                         <Link

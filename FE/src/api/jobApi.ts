@@ -26,4 +26,6 @@ export const jobDescriptionApi = {
     createJobDescription: (data: any) => axiosClient.post('/job-descriptions', data),
     updateJobDescription: (data: any) => axiosClient.put(`/job-descriptions/${data.id}`, data),
     deleteJobDescription: (id: number) => axiosClient.delete(`/job-descriptions/${id}`),
+    approvedJobDescription: (id: number) => axiosClient.put(`/job-descriptions/${id}/approved`),
+    rejectJobDescription: (id: number) => axiosClient.put(`/job-descriptions/${id}/rejected`),
 };

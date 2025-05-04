@@ -92,15 +92,16 @@ const JobDescription = () => {
                             </option>
                         ))}
                     </Select>
-                    <Select value={statusFilter} onChange={handleStatusChange}>
-                        <option value="">All Status</option>
-                        {JOB_DESCRIPTION_STATUS.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </Select>
-
+                    {user.user.role_id !== ROLE.CANDIDATE && (
+                        <Select value={statusFilter} onChange={handleStatusChange}>
+                            <option value="">All Status</option>
+                            {JOB_DESCRIPTION_STATUS.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </Select>
+                    )}
                     <TextInput
                         type="text"
                         placeholder="Search job..."
@@ -108,9 +109,11 @@ const JobDescription = () => {
                         onChange={handleSearchChange}
                     />
                 </div>
-                <Link to={ROUTER.POST_JOB}>
-                    <Button color="blue">Create Job Description</Button>
-                </Link>
+                {user.user.role_id !== ROLE.CANDIDATE && (
+                    <Link to={ROUTER.POST_JOB}>
+                        <Button color="blue">Create Job Description</Button>
+                    </Link>
+                )}
             </div>
 
             {loading ? (
@@ -120,7 +123,6 @@ const JobDescription = () => {
             ) : (
                 <>
                     <div className="grid gap-6">
-                        {console.log('check favorites=====', favorites)}
                         {jobs.length > 0 ? (
                             jobs.map((job) => (
                                 <PostJobCard

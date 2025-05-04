@@ -11,6 +11,7 @@ export const ROUTER = {
     POST_JOB: '/post-job',
     EDIT_JOB: '/edit-job/:id',
     FAVORITE_JOB: '/favorite-job',
+    MY_CV_APPLICATIONS: '/cv-applications',
 };
 
 export const ROLE_MAP: Record<number, string> = {

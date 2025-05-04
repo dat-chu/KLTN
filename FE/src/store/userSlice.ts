@@ -60,10 +60,9 @@ const userSlice = createSlice({
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.loading = false;
                 const updatedUser = action.payload as UserWithoutPassword;
-                const index = state.users.findIndex((user) => user.id === updatedUser.id);
-                if (index !== -1) {
-                    state.users[index] = updatedUser;
-                }
+                state.usersPaginated = state.usersPaginated.map((user) =>
+                    user.id === updatedUser.id ? updatedUser : user
+                );
             })
             .addCase(updateUser.rejected, (state, action) => {
                 state.loading = false;

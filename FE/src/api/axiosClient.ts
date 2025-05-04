@@ -3,9 +3,6 @@ import {loadFromLocalStorage, saveToLocalStorage} from "../helpers/localStorage"
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000",
-  headers: {
-    "Content-Type": "application/json",
-  },
   timeout: 10000, // 10 seconds timeout
 });
 

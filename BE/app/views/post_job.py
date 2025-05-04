@@ -4,10 +4,11 @@ from sqlalchemy.orm import Session, joinedload
 from app.model.favorite_job import FavoriteJob
 from app.model.job_description_programming_language import JobDescriptionProgrammingLanguage
 from app.model.programming_language import ProgrammingLanguage
-from app.helper import get_current_user_id
+from app.helper import get_current_user_id, get_current_user_role_id
 from app.database.get_db import get_db
 from app.schema.post_job_schema import JobPaginationResponse, PostJobResponse, PostJobCreation
 from app.model.job_description import JobDescription
+from app.model.role import Role
 
 router = APIRouter(prefix="/job-descriptions", tags=["Job Description"])
 
@@ -19,9 +20,15 @@ def get_job_descriptions(
     search: str = Query(default=""),
     skip: int = 0,
     limit: int = 10,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user_role: str = Depends(get_current_user_role_id)
 ):
+    role_name = db.query(Role).filter(Role.id == current_user_role).first().name
+    
     query = db.query(JobDescription)
+    
+    if role_name == "Candidate":
+        status = "Approved" # Candidate can only see approved jobs
 
     if level:
         query = query.filter(JobDescription.level.ilike(f"%{level}%"))
@@ -242,4 +249,26 @@ def delete_job_description(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Job Description not found")
     db.delete(db_job_description)
     db.commit()
+    return db_job_description
+
+
+@router.put("/{id}/approved")
+def approve_job_description(id: int, db: Session = Depends(get_db)):
+    db_job_description = db.query(JobDescription).filter(JobDescription.id == id).first()
+    if not db_job_description:
+        raise HTTPException(status_code=404, detail="Job Description not found")
+    db_job_description.status = "Approved"
+    db.commit()
+    db.refresh(db_job_description)
+    return db_job_description
+
+
+@router.put("/{id}/rejected")
+def reject_job_description(id: int, db: Session = Depends(get_db)):
+    db_job_description = db.query(JobDescription).filter(JobDescription.id == id).first()
+    if not db_job_description:
+        raise HTTPException(status_code=404, detail="Job Description not found")
+    db_job_description.status = "Reviewing"
+    db.commit()
+    db.refresh(db_job_description)
     return db_job_description

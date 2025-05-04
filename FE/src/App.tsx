@@ -15,6 +15,7 @@ import PostJob from './containers/Recruiter/PostJob';
 import JobDescription from './containers/Recruiter/JobDescription';
 import JobDescriptionDetail from './containers/Recruiter/JobDescriptionDetail';
 import EditJobPage from './containers/Recruiter/EditJob';
+import MyCVApplication from './containers/Candidate/MyCVApplication';
 
 function App() {
     return (
@@ -106,7 +107,7 @@ function App() {
                     <Route
                         path={ROUTER.POST_JOB}
                         element={
-                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER, ROLE.ADMIN]}>
                                 <Layout>
                                     <PostJob />
                                 </Layout>
@@ -116,9 +117,19 @@ function App() {
                     <Route
                         path={ROUTER.EDIT_JOB}
                         element={
-                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER]}>
+                            <RoleProtectedRoute allowedRoles={[ROLE.RECRUITER, ROLE.ADMIN]}>
                                 <Layout>
                                     <EditJobPage />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path={ROUTER.MY_CV_APPLICATIONS}
+                        element={
+                            <RoleProtectedRoute allowedRoles={[ROLE.CANDIDATE]}>
+                                <Layout>
+                                    <MyCVApplication />
                                 </Layout>
                             </RoleProtectedRoute>
                         }

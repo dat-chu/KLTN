@@ -3,6 +3,7 @@ import usersReducer from './userSlice';
 import authReducer from './authSlice';
 import jobReducer from './jobSlice';
 import favoriteJobReducer from './favoriteJobSlice';
+import cvReducer from './cvSlice';
 import { loadFromLocalStorage } from '../helpers/localStorage';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,6 +15,7 @@ export const store = configureStore({
         auth: authReducer,
         job: jobReducer,
         favoriteJob: favoriteJobReducer,
+        cv: cvReducer,
     },
     preloadedState: {
         auth: {

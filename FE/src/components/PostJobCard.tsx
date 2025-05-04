@@ -1,14 +1,18 @@
 import { Badge, Button } from 'flowbite-react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { JOB_DESCRIPTION_STATUS, LEVEL_OPTIONS } from '../helpers/constant';
 import { getLabelByValue } from '../helpers/convertToSelectOptions';
 import { formatDateToMMDDYYYY } from '../helpers/date';
-import { Pencil, Trash2, Heart } from 'lucide-react';
+import { Pencil, Trash2, Heart, CheckCircle, XCircle } from 'lucide-react';
 import ConfirmModal from './ConfirmModal';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store/store';
-import { deleteJobDescription } from '../store/jobThunk';
+import {
+    deleteJobDescription,
+    approvedJobDescription,
+    rejectJobDescription,
+} from '../store/jobThunk';
 import { ROLE } from '../typeEnum';
 import { postFavoriteJob, deleteFavoriteJob } from '../store/favoriteJobThunk';
 
@@ -47,10 +51,17 @@ const PostJobCard = ({
             } else {
                 await dispatch(postFavoriteJob(id));
             }
-            // setIsFavorite(!isFavorite);
         } catch (error) {
             console.error('Toggle favorite failed:', error);
         }
+    };
+
+    const handleApprove = async () => {
+        await dispatch(approvedJobDescription(id));
+    };
+
+    const handleReject = async () => {
+        await dispatch(rejectJobDescription(id));
     };
 
     return (
@@ -95,7 +106,7 @@ const PostJobCard = ({
                     {getLabelByValue(level, LEVEL_OPTIONS)}
                 </div>
                 <div>
-                    <span className="font-medium">Salary:</span>{' '}
+                    <span className="font-medium">Salary:</span> $
                     {(Number(salaryMax) + Number(salaryMin)) / 2}
                 </div>
                 <div>
@@ -109,7 +120,7 @@ const PostJobCard = ({
                 </div>
             </div>
             {user.role_id !== ROLE.CANDIDATE ? (
-                <div className="flex w-full justify-end gap-2">
+                <div className="mt-4 flex w-full justify-end gap-2">
                     <Link to={`/edit-job/${id}`}>
                         <Button
                             size="xs"
@@ -129,6 +140,25 @@ const PostJobCard = ({
                         <Trash2 size={14} />
                         Delete
                     </Button>
+                    {/* Admin: Approve/Reject */}
+                    <div className="flex gap-2">
+                        <Button
+                            size="xs"
+                            className="cursor-pointer bg-green-500 transition hover:bg-green-600"
+                            onClick={handleApprove}
+                        >
+                            <CheckCircle size={14} />
+                            Approve
+                        </Button>
+                        <Button
+                            size="xs"
+                            className="cursor-pointer bg-red-500 transition hover:bg-red-600"
+                            onClick={handleReject}
+                        >
+                            <XCircle size={14} />
+                            Reject
+                        </Button>
+                    </div>
                 </div>
             ) : (
                 <div className="mt-4 flex justify-end">
